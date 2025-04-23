@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: python-backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: node-frontend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://python-backend:4000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
